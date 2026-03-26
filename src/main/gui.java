@@ -286,7 +286,6 @@ public class gui extends javax.swing.JFrame {
     private void resetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetMouseClicked
         szoveg = "Rendezendő számok:\n";
         szamokKiirasHelye.setText(szoveg);
-
         tomb = new int[0];
         panel.setTomb(tomb);
         panel.repaint();
