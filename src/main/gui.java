@@ -11,11 +11,12 @@ public class gui extends javax.swing.JFrame {
 
     String szoveg = "Rendezendő számok:\n";
     int[] tomb;
+    private BarPanel panel;
 
     public gui() {
         initComponents();
         szamokKiirasHelye.setText(szoveg);
-        BarPanel panel = new BarPanel();
+        panel = new BarPanel();
         grafikon.setLayout(new BorderLayout());
         grafikon.add(panel, BorderLayout.CENTER);
         stilusok();
@@ -177,7 +178,7 @@ public class gui extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(grafikon, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                .addComponent(grafikon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,12 +261,16 @@ public class gui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rendezMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendezMouseClicked
+        if (tomb == null || tomb.length == 0) {
+            return;
+        }
+        Rendez rendezes = new Rendez(
+                tomb,
+                () -> panel.repaint(),
+                (i, j) -> panel.setAktiv(i, j)
+        );
         int index = rendezesTipusok.getSelectedIndex();
-        Rendez rendezes = new Rendez(tomb);
         switch (index) {
-            default:
-                rendezes.egyszeruRendezes();
-                break;
             case 0:
                 rendezes.egyszeruRendezes();
                 break;
@@ -276,15 +281,15 @@ public class gui extends javax.swing.JFrame {
                 rendezes.minimumKivalasztasosRendezes();
                 break;
         }
-        BarPanel panel = new BarPanel(rendezes.getTomb());
-        Ujrarazjol(panel);
     }//GEN-LAST:event_rendezMouseClicked
 
     private void resetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetMouseClicked
         szoveg = "Rendezendő számok:\n";
         szamokKiirasHelye.setText(szoveg);
-        BarPanel panel = new BarPanel();
-        Ujrarazjol(panel);
+
+        tomb = new int[0];
+        panel.setTomb(tomb);
+        panel.repaint();
     }//GEN-LAST:event_resetMouseClicked
 
     private void HozzaadasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HozzaadasMouseClicked
@@ -307,7 +312,8 @@ public class gui extends javax.swing.JFrame {
             for (int i = 0; i < tomb.length; i++) {
                 tomb[i] = Integer.parseInt(szetvagottSzamok[i].trim());
             }
-            Ujrarazjol(new BarPanel(tomb));
+            panel.setTomb(tomb);
+            panel.repaint();
         } catch (NumberFormatException e) {
             System.err.println("Hiba: Érvénytelen formátum!");
         }

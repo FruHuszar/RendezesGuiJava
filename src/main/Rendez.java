@@ -1,48 +1,94 @@
 package main;
-
-import java.util.Arrays;
-
+import javax.swing.SwingUtilities;
+import java.util.function.BiConsumer;
 public class Rendez {
 
     private int[] tomb;
+    private Runnable rajzolas;
+    private BiConsumer<Integer, Integer> aktivCallback;
 
-    public Rendez(int[] bemenoTomb) {
-    this.tomb = (bemenoTomb == null || bemenoTomb.length < 1) 
-                ? new int[]{2, 5, 8, 3, 7, 6, 4} 
-                : Arrays.copyOf(bemenoTomb, bemenoTomb.length);
-}
+    public Rendez(int[] bemenoTomb,
+                  Runnable rajzolas,
+                  BiConsumer<Integer, Integer> aktivCallback) {
+
+        this.tomb = (bemenoTomb == null || bemenoTomb.length < 1)
+                ? new int[]{2, 5, 8, 3, 7, 6, 4}
+                : bemenoTomb;
+
+        this.rajzolas = rajzolas;
+        this.aktivCallback = aktivCallback;
+    }
 
     public void egyszeruRendezes() {
-        for (int i = 0; i < tomb.length - 1; i++) {
-            for (int j = i + 1; j < tomb.length; j++) {
-                if (tomb[i] > tomb[j]) {
-                    cserel(i, j);
+        new Thread(() -> {
+            for (int i = 0; i < tomb.length - 1; i++) {
+                for (int j = i + 1; j < tomb.length; j++) {
+
+                    if (tomb[i] > tomb[j]) {
+                        cserel(i, j);
+                    }
+
+                    frissit(i, j);
+                    sleep();
                 }
             }
-        }
+            vege();
+        }).start();
     }
 
     public void buborekRendezes() {
-        for (int i = 0; i < tomb.length - 1; i++) {
-            for (int j = 0; j < tomb.length - 1 - i; j++) {
-                if (tomb[j] > tomb[j + 1]) {
-                    cserel(j, j + 1);
+        new Thread(() -> {
+            for (int i = 0; i < tomb.length - 1; i++) {
+                for (int j = 0; j < tomb.length - 1 - i; j++) {
+
+                    if (tomb[j] > tomb[j + 1]) {
+                        cserel(j, j + 1);
+                    }
+                    frissit(j, j + 1);
+                    sleep();
                 }
             }
-        }
+            vege();
+        }).start();
     }
 
     public void minimumKivalasztasosRendezes() {
-        for (int i = 0; i < tomb.length - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < tomb.length; j++) {
-                if (tomb[j] < tomb[minIndex]) {
-                    minIndex = j;
+        new Thread(() -> {
+            for (int i = 0; i < tomb.length - 1; i++) {
+                int minIndex = i;
+                for (int j = i + 1; j < tomb.length; j++) {
+
+                    if (tomb[j] < tomb[minIndex]) {
+                        minIndex = j;
+                    }
+
+                    frissit(i, j);
+                    sleep();
+                }
+                if (minIndex != i) {
+                    cserel(i, minIndex);
+                    frissit(i, minIndex);
+                    sleep();
                 }
             }
-            if (minIndex != i) {
-                cserel(i, minIndex);
-            }
+            vege();
+        }).start();
+    }
+
+    private void frissit(int i, int j) {
+
+        if (aktivCallback != null) {
+            SwingUtilities.invokeLater(() -> aktivCallback.accept(i, j));
+        }
+
+        if (rajzolas != null) {
+            SwingUtilities.invokeLater(rajzolas);
+        }
+    }
+
+    private void vege() {
+        if (aktivCallback != null) {
+            SwingUtilities.invokeLater(() -> aktivCallback.accept(-1, -1));
         }
     }
 
@@ -50,6 +96,14 @@ public class Rendez {
         int temp = tomb[i];
         tomb[i] = tomb[j];
         tomb[j] = temp;
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(350);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int[] getTomb() {
