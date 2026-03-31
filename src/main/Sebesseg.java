@@ -1,11 +1,11 @@
 package main;
 
 public enum Sebesseg {
-    VILLAM(300),
-    GYORS(450),
-    KOZEPES(600),
-    LASSU(800),
-    LEPESENKENT(1500);
+    VILLAM(20),
+    GYORS(250),
+    KOZEPES(400),
+    LASSU(500),
+    LEPESENKENT(1000);
 
     private final int miliszekundum;
 

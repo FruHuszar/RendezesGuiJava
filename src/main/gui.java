@@ -194,7 +194,7 @@ public class gui extends javax.swing.JFrame {
             }
         });
 
-        rendezesTipusok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Egyszerű", "Buborék", "Minimum" }));
+        rendezesTipusok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Egyszerű", "Buborék", "Minimum", "Merge" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -280,13 +280,16 @@ public class gui extends javax.swing.JFrame {
             case 2:
                 rendezes.minimumKivalasztasosRendezes(kesleltetes);
                 break;
+            case 3:
+                rendezes.mergeRendezesIndit(kesleltetes);
+                break;    
         }
 
     }//GEN-LAST:event_rendezMouseClicked
 
     private void HozzaadasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HozzaadasMouseClicked
         int szam = (int) szamValaszto.getValue();
-        szoveg += szam + "; ";
+        szoveg += szam + ";";
         szamokKiirasHelye.setText(szoveg);
     }//GEN-LAST:event_HozzaadasMouseClicked
 
@@ -298,7 +301,7 @@ public class gui extends javax.swing.JFrame {
         if (osszesSzam.endsWith(";")) {
             osszesSzam = osszesSzam.substring(0, osszesSzam.length() - 1);
         }
-        String[] szetvagottSzamok = osszesSzam.split("; ");
+        String[] szetvagottSzamok = osszesSzam.split(";");
         tomb = new int[szetvagottSzamok.length];
         try {
             for (int i = 0; i < tomb.length; i++) {
