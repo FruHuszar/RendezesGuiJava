@@ -11,42 +11,40 @@ public class gui extends javax.swing.JFrame {
 
     String szoveg = "Rendezendő számok:\n";
     int[] tomb;
-    private BarPanel panel;
+    private oszlop panel;
 
     public gui() {
         initComponents();
         szamokKiirasHelye.setText(szoveg);
-        panel = new BarPanel();
+        panel = new oszlop();
         grafikon.setLayout(new BorderLayout());
         grafikon.add(panel, BorderLayout.CENTER);
         stilusok();
-
     }
 
     private void stilusok() {
-        // --- Az egész JFrame háttérszíne ---
+        // JFrame háttérszíne
         getContentPane().setBackground(Szinek.HATTER.getColor());
 
-        // --- Panelek ---
+        // Panelek
         Design.applyPanelStyle(control);
         Design.applyPanelStyle(jPanel1);
         Design.applyPanelStyle(jPanel2);
         Design.applyPanelStyle(grafikon);
 
-        // --- Gombok ---
+        // Gombok
         Design.applyButtonStyle(Hozzaadas);
         Design.applyButtonStyle(rajzolGomb);
         Design.applyButtonStyle(rendez);
-        Design.applyButtonStyle(reset);
 
-        // --- TextArea + ScrollPane ---
+        // TextArea + ScrollPane
         Design.applyScrollPaneStyle(jScrollPane1);
         szamokKiirasHelye.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
-        szamokKiirasHelye.setForeground(Szinek.HATTER.getColor());  // szöveg színe = háttér
+        szamokKiirasHelye.setForeground(Szinek.FEKETE.getColor());  
         szamokKiirasHelye.setBackground(Szinek.ALICEBLUE.getColor());
-        szamokKiirasHelye.setCaretColor(Szinek.FEKETE.getColor());   // kurzor látható legyen
+        szamokKiirasHelye.setCaretColor(Szinek.FEKETE.getColor()); 
 
-        // --- Spinner stílus ---
+        // Spinner
         szamValaszto.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
         szamValaszto.setBackground(Szinek.ALICEBLUE.getColor());
         szamValaszto.setForeground(Szinek.BETU.getColor());
@@ -55,28 +53,27 @@ public class gui extends javax.swing.JFrame {
         ((JSpinner.DefaultEditor) szamValaszto.getEditor()).getTextField()
                 .setForeground(Szinek.BETU.getColor());
 
-        // Spinner nyilak (basic megoldás: UIManager)
+        // Spinner nyilak
         UIManager.put("Spinner.arrowButtonBackground", Szinek.HATTER.getColor());
         UIManager.put("Spinner.arrowButtonBorder", BorderFactory.createEmptyBorder());
 
-        // --- ComboBox ---
+        // ComboBox
         rendezesTipusok.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
         rendezesTipusok.setBackground(Szinek.ALICEBLUE.getColor());
         rendezesTipusok.setForeground(Szinek.BETU.getColor());
 
-        // --- Spinner stílus ---
+        // Spinner stílus
         szamValaszto.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
         JSpinner.DefaultEditor spinnerEditor = (JSpinner.DefaultEditor) szamValaszto.getEditor();
         spinnerEditor.getTextField().setBackground(Szinek.ALICEBLUE.getColor());
-        spinnerEditor.getTextField().setForeground(Szinek.FEKETE.getColor()); // fekete betű
+        spinnerEditor.getTextField().setForeground(Szinek.FEKETE.getColor()); 
         szamValaszto.setBackground(Szinek.ALICEBLUE.getColor());
         szamValaszto.setForeground(Szinek.FEKETE.getColor());
 
-        // --- ComboBox stílus ---
+        // ComboBox stílus
         rendezesTipusok.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14));
         rendezesTipusok.setBackground(Szinek.ALICEBLUE.getColor());
         rendezesTipusok.setForeground(Szinek.FEKETE.getColor());
-
     }
 
     @SuppressWarnings("unchecked")
@@ -94,7 +91,6 @@ public class gui extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         rendez = new javax.swing.JButton();
         rendezesTipusok = new javax.swing.JComboBox<>();
-        reset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Rendezések");
@@ -165,7 +161,7 @@ public class gui extends javax.swing.JFrame {
         grafikon.setLayout(grafikonLayout);
         grafikonLayout.setHorizontalGroup(
             grafikonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 316, Short.MAX_VALUE)
+            .addGap(0, 308, Short.MAX_VALUE)
         );
         grafikonLayout.setVerticalGroup(
             grafikonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,26 +216,18 @@ public class gui extends javax.swing.JFrame {
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {rendez, rendezesTipusok});
 
-        reset.setText("Újrakezd");
-        reset.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                resetMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(19, 19, 19)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(31, 31, 31)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(control, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(reset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 41, Short.MAX_VALUE))
+                    .addComponent(control, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 47, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,11 +237,10 @@ public class gui extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(control, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(reset)))
-                .addGap(108, 108, 108))
+                        .addGap(29, 29, 29)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -261,35 +248,41 @@ public class gui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rendezMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rendezMouseClicked
-        if (tomb == null || tomb.length == 0) {
+        if (tomb == null || tomb.length == 0 || !rendez.isEnabled()) {
             return;
         }
+
+        // Gomb letiltása, hogy ne indulhasson el két rendezés egyszerre
+        letilasEsEngedes(false);
+
         Rendez rendezes = new Rendez(
                 tomb,
                 () -> panel.repaint(),
-                (i, j) -> panel.setAktiv(i, j)
+                (i, j) -> {
+                    panel.setAktiv(i, j);
+                    // Ha vége a rendezésnek (visszakaptuk a -1, -1-et), gomb vissza
+                    if (i == -1) {
+                        letilasEsEngedes(true);
+                    }
+                }
         );
+
+        int kesleltetes = Sebesseg.VILLAM.getIdo();
         int index = rendezesTipusok.getSelectedIndex();
+
         switch (index) {
             case 0:
-                rendezes.egyszeruRendezes();
+                rendezes.egyszeruRendezes(kesleltetes);
                 break;
             case 1:
-                rendezes.buborekRendezes();
+                rendezes.buborekRendezes(kesleltetes);
                 break;
             case 2:
-                rendezes.minimumKivalasztasosRendezes();
+                rendezes.minimumKivalasztasosRendezes(kesleltetes);
                 break;
         }
-    }//GEN-LAST:event_rendezMouseClicked
 
-    private void resetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetMouseClicked
-        szoveg = "Rendezendő számok:\n";
-        szamokKiirasHelye.setText(szoveg);
-        tomb = new int[0];
-        panel.setTomb(tomb);
-        panel.repaint();
-    }//GEN-LAST:event_resetMouseClicked
+    }//GEN-LAST:event_rendezMouseClicked
 
     private void HozzaadasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HozzaadasMouseClicked
         int szam = (int) szamValaszto.getValue();
@@ -317,6 +310,12 @@ public class gui extends javax.swing.JFrame {
             System.err.println("Hiba: Érvénytelen formátum!");
         }
     }
+    
+    private void letilasEsEngedes(boolean enged){
+        rendez.setEnabled(enged);
+        rajzolGomb.setEnabled(enged);
+        Hozzaadas.setEnabled(enged);
+    }
 
     private void rajzolGombMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rajzolGombMouseClicked
         feldolgozEsRajzol();
@@ -336,7 +335,7 @@ public class gui extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new gui().setVisible(true));
     }
 
-    public void Ujrarazjol(BarPanel panel) {
+    public void Ujrarazjol(oszlop panel) {
         grafikon.removeAll();
         grafikon.add(panel, BorderLayout.CENTER);
         grafikon.revalidate();
@@ -353,7 +352,6 @@ public class gui extends javax.swing.JFrame {
     private javax.swing.JButton rajzolGomb;
     private javax.swing.JButton rendez;
     private javax.swing.JComboBox<String> rendezesTipusok;
-    private javax.swing.JButton reset;
     private javax.swing.JSpinner szamValaszto;
     private javax.swing.JTextArea szamokKiirasHelye;
     // End of variables declaration//GEN-END:variables

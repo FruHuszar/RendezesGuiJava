@@ -1,112 +1,80 @@
 package main;
-import javax.swing.SwingUtilities;
+
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
 import java.util.function.BiConsumer;
+
 public class Rendez {
 
     private int[] tomb;
     private Runnable rajzolas;
     private BiConsumer<Integer, Integer> aktivCallback;
+    private Timer alvas;
+    private int i, j, minIndex;
 
-    public Rendez(int[] bemenoTomb,
-                  Runnable rajzolas,
-                  BiConsumer<Integer, Integer> aktivCallback) {
-
-        this.tomb = (bemenoTomb == null || bemenoTomb.length < 1)
-                ? new int[]{2, 5, 8, 3, 7, 6, 4}
-                : bemenoTomb;
-
+    public Rendez(int[] bemenoTomb, Runnable rajzolas, BiConsumer<Integer, Integer> aktivCallback) {
+        this.tomb = bemenoTomb;
         this.rajzolas = rajzolas;
         this.aktivCallback = aktivCallback;
     }
 
-    public void egyszeruRendezes() {
-        new Thread(() -> {
-            for (int i = 0; i < tomb.length - 1; i++) {
-                for (int j = i + 1; j < tomb.length; j++) {
+    public void buborekRendezes(int kesleltetes) {
+        i = 0; j = 0;
+        alvas = new Timer(kesleltetes, (ActionEvent e) -> {
+            if (i < tomb.length - 1) {
+                if (tomb[j] > tomb[j + 1]) cserel(j, j + 1);
+                frissit(j, j + 1);
+                j++;
+                if (j >= tomb.length - 1 - i) { j = 0; i++; }
+            } else { vege(); }
+        });
+        alvas.start();
+    }
 
-                    if (tomb[i] > tomb[j]) {
-                        cserel(i, j);
-                    }
+    public void egyszeruRendezes(int kesleltetes) {
+        i = 0; j = 1;
+        alvas = new Timer(kesleltetes, (ActionEvent e) -> {
+            if (i < tomb.length - 1) {
+                if (tomb[i] > tomb[j]) cserel(i, j);
+                frissit(i, j);
+                j++;
+                if (j >= tomb.length) { i++; j = i + 1; }
+            } else { vege(); }
+        });
+        alvas.start();
+    }
 
+    public void minimumKivalasztasosRendezes(int kesleltetes) {
+        i = 0; j = 1; minIndex = 0;
+        alvas = new Timer(kesleltetes, (ActionEvent e) -> {
+            if (i < tomb.length - 1) {
+                if (j < tomb.length) {
+                    if (tomb[j] < tomb[minIndex]) minIndex = j;
                     frissit(i, j);
-                    sleep();
+                    j++;
+                } else {
+                    if (minIndex != i) cserel(i, minIndex);
+                    i++; j = i + 1; minIndex = i;
+                    frissit(i, -1);
                 }
-            }
-            vege();
-        }).start();
+            } else { vege(); }
+        });
+        alvas.start();
     }
 
-    public void buborekRendezes() {
-        new Thread(() -> {
-            for (int i = 0; i < tomb.length - 1; i++) {
-                for (int j = 0; j < tomb.length - 1 - i; j++) {
-
-                    if (tomb[j] > tomb[j + 1]) {
-                        cserel(j, j + 1);
-                    }
-                    frissit(j, j + 1);
-                    sleep();
-                }
-            }
-            vege();
-        }).start();
+    private void cserel(int a, int b) {
+        int temp = tomb[a];
+        tomb[a] = tomb[b];
+        tomb[b] = temp;
     }
 
-    public void minimumKivalasztasosRendezes() {
-        new Thread(() -> {
-            for (int i = 0; i < tomb.length - 1; i++) {
-                int minIndex = i;
-                for (int j = i + 1; j < tomb.length; j++) {
-
-                    if (tomb[j] < tomb[minIndex]) {
-                        minIndex = j;
-                    }
-
-                    frissit(i, j);
-                    sleep();
-                }
-                if (minIndex != i) {
-                    cserel(i, minIndex);
-                    frissit(i, minIndex);
-                    sleep();
-                }
-            }
-            vege();
-        }).start();
-    }
-
-    private void frissit(int i, int j) {
-
-        if (aktivCallback != null) {
-            SwingUtilities.invokeLater(() -> aktivCallback.accept(i, j));
-        }
-
-        if (rajzolas != null) {
-            SwingUtilities.invokeLater(rajzolas);
-        }
+    private void frissit(int a, int b) {
+        if (aktivCallback != null) aktivCallback.accept(a, b);
+        if (rajzolas != null) rajzolas.run();
     }
 
     private void vege() {
-        if (aktivCallback != null) {
-            SwingUtilities.invokeLater(() -> aktivCallback.accept(-1, -1));
-        }
-    }
-
-    private void cserel(int i, int j) {
-        int temp = tomb[i];
-        tomb[i] = tomb[j];
-        tomb[j] = temp;
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(350);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public int[] getTomb() {
-        return tomb;
+        if (alvas != null) alvas.stop();
+        if (aktivCallback != null) aktivCallback.accept(-1, -1);
     }
 }
